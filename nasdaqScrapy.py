@@ -95,3 +95,8 @@ if __name__ == "__main__":
     print("Writing scraped data to output file")
     with open('%s-summary.json' % (ticker), 'w') as fp:
         json.dump(scraped_data, fp, indent=4, ensure_ascii=False)
+    myclient = pymongo.MongoClient('mongodb://localhost:27899/')
+    mydb = myclient['scrap']
+    mycol = mydb["test"]
+    x = mycol.insert_one(scraped_data)
+    print(x.inserted_id)
