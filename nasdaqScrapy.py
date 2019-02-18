@@ -20,22 +20,16 @@ def parse_finance_page(ticker):
     """
     key_stock_dict = {}
     headers = {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-        "Accept-Encoding": "gzip, deflate",
-        "Accept-Language": "en-GB,en;q=0.9,en-US;q=0.8,ml;q=0.7",
-        "Connection": "keep-alive",
-        "Host": "www.nasdaq.com",
-        "Referer": "https://www.nasdaq.com",
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
+        "Referer": "http://www.nasdaq.com",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36"
     }
-
+    requests.packages.urllib3.disable_warnings()
     # Retrying for failed request
     for retries in range(5):
         try:
-            url = "https://www.nasdaq.com/symbol/%s" % (ticker)
-            response = requests.get(url, headers=headers, verify=False)
-
+            url = "http://www.nasdaq.com/symbol/%s" % (ticker)
+            response = requests.get(url, verify=False)
+            print("respose code:%d" % (response.status_code))
             if response.status_code != 200:
                 raise ValueError("Invalid Response Received From Webserver")
 
@@ -99,9 +93,5 @@ if __name__ == "__main__":
     print("Fetching data for %s" % (ticker))
     scraped_data = parse_finance_page(ticker)
     print("Writing scraped data to output file")
-    myclient = pymongo.MongoClient('mongodb://localhost:27899/')
-    dblist = myclient.list_database_names()
-    for db in dblist:
-        print(db)
     with open('%s-summary.json' % (ticker), 'w') as fp:
         json.dump(scraped_data, fp, indent=4, ensure_ascii=False)
