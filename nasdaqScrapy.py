@@ -72,11 +72,11 @@ def parse_finance_page(ticker):
                 "company_name": company_name,
                 "ticker": ticker,
                 "url": url,
-                "open price": open_price,
+                "open_price": open_price,
                 "open_date": open_date,
                 "close_price": close_price,
                 "close_date": close_date,
-                "key_stock_data": key_stock_dict
+                # "key_stock_data": key_stock_dict
             }
             return nasdaq_data
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     with open('%s-summary.json' % (ticker), 'w') as fp:
         json.dump(scraped_data, fp, indent=4, ensure_ascii=False)
     myclient = pymongo.MongoClient('mongodb://localhost:27899/')
-    mydb = myclient['scrap']
-    mycol = mydb["test"]
+    mydb = myclient['resthub']
+    mycol = mydb["stocks"]
     x = mycol.insert_one(scraped_data)
     print(x.inserted_id)
