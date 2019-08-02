@@ -63,7 +63,7 @@ def parse_finance_page(ticker):
             for i in key_stock_table:
                 key = i.xpath(xpath_key)
                 value = i.xpath(xpath_value)
-                key = ''.join(key).strip()
+                key = ''.join(key).strip().replace(".", "_")
                 value = ' '.join(''.join(value).split())
                 key_stock_dict[key] = value
 
@@ -76,7 +76,7 @@ def parse_finance_page(ticker):
                 "open_date": open_date,
                 "close_price": close_price,
                 "close_date": close_date,
-                # "key_stock_data": key_stock_dict
+                "key_stock_data": key_stock_dict
             }
             return nasdaq_data
 
@@ -89,14 +89,16 @@ if __name__ == "__main__":
     # argparser.add_argument('ticker', help='Company stock symbol')
     # args = argparser.parse_args()
     # ticker = args.ticker
-    ticker = 'aapl'
-    print("Fetching data for %s" % (ticker))
-    scraped_data = parse_finance_page(ticker)
-    print("Writing scraped data to output file")
-    with open('%s-summary.json' % (ticker), 'w') as fp:
-        json.dump(scraped_data, fp, indent=4, ensure_ascii=False)
-    myclient = pymongo.MongoClient('mongodb://localhost:27899/')
-    mydb = myclient['resthub']
-    mycol = mydb["stocks"]
-    x = mycol.insert_one(scraped_data)
-    print(x.inserted_id)
+    # symbols = ['aapl', 'gluu', 'mu', 'ntap', 'msft', 'intc', 'znga', 'csco', 'siri', 'jd', 'fb', 'nvda', 'bl', 'ftnt', 'chrs', 'loco', 'catm', 'cnce', 'fizz', 'acor', 'fldm', 'sptn', 'cent', 'xent', 'adap', 'gpro', 'brks', 'sgms', 'iova', 'aaon', 'eigi', 'amzn', 'nflx', 'tsla']
+    symbols = ['aapl']
+    for ticker in symbols:
+        print("Fetching data for %s" % (ticker))
+        scraped_data = parse_finance_page(ticker)
+        print("Writing scraped data to output file")
+        with open('%s-summary.json' % (ticker), 'w') as fp:
+            json.dump(scraped_data, fp, indent=4, ensure_ascii=False)
+        myclient = pymongo.MongoClient('mongodb://localhost:27899/')
+        mydb = myclient['resthub']
+        mycol = mydb["stocks"]
+        x = mycol.insert_one(scraped_data)
+        print(x.inserted_id)
