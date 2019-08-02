@@ -89,8 +89,7 @@ if __name__ == "__main__":
     # argparser.add_argument('ticker', help='Company stock symbol')
     # args = argparser.parse_args()
     # ticker = args.ticker
-    # symbols = ['aapl', 'gluu', 'mu', 'ntap', 'msft', 'intc', 'znga', 'csco', 'siri', 'jd', 'fb', 'nvda', 'bl', 'ftnt', 'chrs', 'loco', 'catm', 'cnce', 'fizz', 'acor', 'fldm', 'sptn', 'cent', 'xent', 'adap', 'gpro', 'brks', 'sgms', 'iova', 'aaon', 'eigi', 'amzn', 'nflx', 'tsla']
-    symbols = ['aapl']
+    symbols = ['aapl', 'gluu', 'mu', 'ntap', 'msft', 'intc', 'znga', 'csco', 'siri', 'jd', 'fb', 'nvda', 'bl', 'ftnt', 'chrs', 'loco', 'catm', 'cnce', 'fizz', 'acor', 'fldm', 'sptn', 'cent', 'xent', 'adap', 'gpro', 'brks', 'sgms', 'iova', 'aaon', 'eigi', 'amzn', 'nflx', 'tsla']
     for ticker in symbols:
         print("Fetching data for %s" % (ticker))
         scraped_data = parse_finance_page(ticker)
